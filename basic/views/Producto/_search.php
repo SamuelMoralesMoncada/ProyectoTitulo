@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'F_NOMBREPROD') ?>
 
-    <?php // echo $form->field($model, 'f_fecharegistropro') ?>
+    <?php // echo $form->field($model, 'F_FECHAREGISTROPRO') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

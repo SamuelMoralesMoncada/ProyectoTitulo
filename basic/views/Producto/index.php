@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'F_IDUBICA',
             'F_IDPROV',
             //'F_NOMBREPROD',
-            //'f_fecharegistropro',
+            //'F_FECHAREGISTROPRO',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -13,7 +13,7 @@ use Yii;
  * @property int $F_IDUBICA
  * @property int $F_IDPROV
  * @property string|null $F_NOMBREPROD
- * @property string $f_fecharegistropro
+ * @property string $F_FECHAREGISTROPRO
  *
  * @property Asigna[] $asignas
  * @property Responsable[] $fIDRESPs
@@ -38,9 +38,9 @@ class Producto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['F_IDMARCA', 'F_IDCAT', 'F_IDUBICA', 'F_IDPROV', 'f_fecharegistropro'], 'required'],
+            [['F_IDMARCA', 'F_IDCAT', 'F_IDUBICA', 'F_IDPROV'], 'required'],
             [['F_IDMARCA', 'F_IDCAT', 'F_IDUBICA', 'F_IDPROV'], 'integer'],
-            [['f_fecharegistropro'], 'safe'],
+            [['F_FECHAREGISTROPRO'], 'safe'],
             [['F_NOMBREPROD'], 'string', 'max' => 100],
             [['F_IDCAT'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::className(), 'targetAttribute' => ['F_IDCAT' => 'F_IDCAT']],
             [['F_IDUBICA'], 'exist', 'skipOnError' => true, 'targetClass' => Ubicacion::className(), 'targetAttribute' => ['F_IDUBICA' => 'F_IDUBICA']],
@@ -61,7 +61,7 @@ class Producto extends \yii\db\ActiveRecord
             'F_IDUBICA' => 'F Idubica',
             'F_IDPROV' => 'F Idprov',
             'F_NOMBREPROD' => 'F Nombreprod',
-            'f_fecharegistropro' => 'F Fecharegistropro',
+            'F_FECHAREGISTROPRO' => 'F Fecharegistropro',
         ];
     }
 
