@@ -19,6 +19,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'F_NOMBREPROV') ?>
 
+    <?= $form->field($model, 'F_DIRECCIONPRO') ?>
+
+    <?= $form->field($model, 'F_ANTIGUEDADPRO') ?>
+
+    <?= $form->field($model, 'F_FONOPRO') ?>
+
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>

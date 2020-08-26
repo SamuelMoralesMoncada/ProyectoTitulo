@@ -17,8 +17,8 @@ class ProveedorSearch extends Proveedor
     public function rules()
     {
         return [
-            [['F_IDPROV'], 'integer'],
-            [['F_NOMBREPROV'], 'safe'],
+            [['F_IDPROV', 'F_FONOPRO'], 'integer'],
+            [['F_NOMBREPROV', 'F_DIRECCIONPRO', 'F_ANTIGUEDADPRO'], 'safe'],
         ];
     }
 
@@ -59,9 +59,12 @@ class ProveedorSearch extends Proveedor
         // grid filtering conditions
         $query->andFilterWhere([
             'F_IDPROV' => $this->F_IDPROV,
+            'F_ANTIGUEDADPRO' => $this->F_ANTIGUEDADPRO,
+            'F_FONOPRO' => $this->F_FONOPRO,
         ]);
 
-        $query->andFilterWhere(['like', 'F_NOMBREPROV', $this->F_NOMBREPROV]);
+        $query->andFilterWhere(['like', 'F_NOMBREPROV', $this->F_NOMBREPROV])
+            ->andFilterWhere(['like', 'F_DIRECCIONPRO', $this->F_DIRECCIONPRO]);
 
         return $dataProvider;
     }

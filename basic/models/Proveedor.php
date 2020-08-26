@@ -9,6 +9,9 @@ use Yii;
  *
  * @property int $F_IDPROV
  * @property string|null $F_NOMBREPROV
+ * @property string $F_DIRECCIONPRO
+ * @property string $F_ANTIGUEDADPRO
+ * @property int $F_FONOPRO
  *
  * @property Producto[] $productos
  */
@@ -28,8 +31,10 @@ class Proveedor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['F_NOMBREPROV'],'required'],
-            [['F_NOMBREPROV'],'string', 'max' => 100],
+            [['F_DIRECCIONPRO', 'F_ANTIGUEDADPRO', 'F_FONOPRO'], 'required'],
+            [['F_ANTIGUEDADPRO'], 'safe'],
+            [['F_FONOPRO'], 'integer'],
+            [['F_NOMBREPROV', 'F_DIRECCIONPRO'], 'string', 'max' => 100],
         ];
     }
 
@@ -41,6 +46,9 @@ class Proveedor extends \yii\db\ActiveRecord
         return [
             'F_IDPROV' => 'F Idprov',
             'F_NOMBREPROV' => 'F Nombreprov',
+            'F_DIRECCIONPRO' => 'F Direccionpro',
+            'F_ANTIGUEDADPRO' => 'F Antiguedadpro',
+            'F_FONOPRO' => 'F Fonopro',
         ];
     }
 

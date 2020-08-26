@@ -28,6 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'F_IDPROV',
             'F_NOMBREPROV',
+            'F_DIRECCIONPRO',
+            'F_ANTIGUEDADPRO',
+            'F_FONOPRO',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
