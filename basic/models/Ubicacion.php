@@ -29,6 +29,7 @@ class Ubicacion extends \yii\db\ActiveRecord
     {
         return [
             [['F_NOMBREUBICA'], 'string', 'max' => 100],
+            [['F_NOMBREUBICA'],'required'],
         ];
     }
 
@@ -38,8 +39,8 @@ class Ubicacion extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'F_IDUBICA' => 'F Idubica',
-            'F_NOMBREUBICA' => 'F Nombreubica',
+            'F_IDUBICA' => 'Código',
+            'F_NOMBREUBICA' => 'Nombre ubicación',
         ];
     }
 

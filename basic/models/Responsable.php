@@ -30,6 +30,7 @@ class Responsable extends \yii\db\ActiveRecord
     {
         return [
             [['F_NOMBRERESP'], 'string', 'max' => 100],
+            [['F_NOMBRERESP'], 'required'],
         ];
     }
 
@@ -39,8 +40,8 @@ class Responsable extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'F_IDRESP' => 'F Idresp',
-            'F_NOMBRERESP' => 'F Nombreresp',
+            'F_IDRESP' => 'Código',
+            'F_NOMBRERESP' => 'Nombre responsable',
         ];
     }
 
