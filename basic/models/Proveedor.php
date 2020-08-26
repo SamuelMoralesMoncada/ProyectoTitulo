@@ -28,7 +28,8 @@ class Proveedor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['F_NOMBREPROV'], 'string', 'max' => 100],
+            [['F_NOMBREPROV'],'required'],
+            [['F_NOMBREPROV'],'string', 'max' => 100],
         ];
     }
 
