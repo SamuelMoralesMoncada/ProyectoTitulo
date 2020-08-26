@@ -18,7 +18,7 @@ class ProductoSearch extends Producto
     {
         return [
             [['F_IDPROD', 'F_IDMARCA', 'F_IDCAT', 'F_IDUBICA', 'F_IDPROV'], 'integer'],
-            [['F_NOMBREPROD'], 'safe'],
+            [['F_NOMBREPROD', 'f_fecharegistropro'], 'safe'],
         ];
     }
 
@@ -63,6 +63,7 @@ class ProductoSearch extends Producto
             'F_IDCAT' => $this->F_IDCAT,
             'F_IDUBICA' => $this->F_IDUBICA,
             'F_IDPROV' => $this->F_IDPROV,
+            'f_fecharegistropro' => $this->f_fecharegistropro,
         ]);
 
         $query->andFilterWhere(['like', 'F_NOMBREPROD', $this->F_NOMBREPROD]);

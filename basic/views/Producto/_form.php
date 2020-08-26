@@ -22,6 +22,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'F_NOMBREPROD')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'f_fecharegistropro')->textInput() ?>
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

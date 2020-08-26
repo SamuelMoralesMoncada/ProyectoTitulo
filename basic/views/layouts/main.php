@@ -40,13 +40,13 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             //['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Proveedor', 'url' => ['/Proveedor/index']],
-            ['label' => 'Marca', 'url' => ['/Marca/index']],
-            ['label' => 'Ubicación', 'url' => ['/Ubicacion/index']],
-            ['label' => 'Responsable', 'url' => ['/Responsable/index']],
-            ['label' => 'Asigna', 'url' => ['/Asigna/index']],
-            ['label' => 'Categoría', 'url' => ['/Categoria/index']],
-            ['label' => 'Producto', 'url' => ['/Producto/index']],
+            ['label' => 'Proveedor', 'url' => ['/proveedor']],
+            ['label' => 'Marca', 'url' => ['/marca']],
+            ['label' => 'Ubicación', 'url' => ['/ubicacion']],
+            ['label' => 'Responsable', 'url' => ['/responsable']],
+            ['label' => 'Asigna', 'url' => ['/asigna']],
+            ['label' => 'Categoría', 'url' => ['/categoria']],
+            ['label' => 'Producto', 'url' => ['/producto']],
             //['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
