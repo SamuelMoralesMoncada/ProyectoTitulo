@@ -12,17 +12,17 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'F_IDMARCA')->textInput() ?>
+    <?= $form->field($model, 'F_IDMARCA')->textInput(['style'=>'width:50%']) ?>
 
-    <?= $form->field($model, 'F_IDCAT')->textInput() ?>
+    <?= $form->field($model, 'F_IDCAT')->textInput(['style'=>'width:50%']) ?>
 
-    <?= $form->field($model, 'F_IDUBICA')->textInput() ?>
+    <?= $form->field($model, 'F_IDUBICA')->textInput(['style'=>'width:50%']) ?>
 
-    <?= $form->field($model, 'F_IDPROV')->textInput() ?>
+    <?= $form->field($model, 'F_IDPROV')->textInput(['style'=>'width:50%']) ?>
 
-    <?= $form->field($model, 'F_NOMBREPROD')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'F_NOMBREPROD')->textInput(['style'=>'width:50%'],['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'F_FECHAREGISTROPRO')->textInput() ?>
+    <?= $form->field($model, 'F_FECHAREGISTROPRO')->textInput(['style'=>'width:50%']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

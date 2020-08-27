@@ -12,13 +12,13 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'F_NOMBREPROV')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'F_NOMBREPROV')->textInput(['style'=>'width:50%'],['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'F_DIRECCIONPRO')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'F_DIRECCIONPRO')->textInput(['style'=>'width:50%'],['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'F_ANTIGUEDADPRO')->textInput() ?>
+    <?= $form->field($model, 'F_ANTIGUEDADPRO')->textInput(['style'=>'width:50%']) ?>
 
-    <?= $form->field($model, 'F_FONOPRO')->textInput() ?>
+    <?= $form->field($model, 'F_FONOPRO')->textInput(['style'=>'width:50%']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'F_NOMBRECAT')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'F_NOMBRECAT')->textInput(['style'=>'width:50%'],['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

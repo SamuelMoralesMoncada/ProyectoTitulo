@@ -30,7 +30,7 @@ class Asigna extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['F_IDPROD', 'F_IDRESP'], 'required'],
+            [['F_IDPROD', 'F_IDRESP','F_FECHAASIGNA'], 'required'],
             [['F_IDPROD', 'F_IDRESP'], 'integer'],
             [['F_FECHAASIGNA'], 'safe'],
             [['F_IDPROD', 'F_IDRESP'], 'unique', 'targetAttribute' => ['F_IDPROD', 'F_IDRESP']],
