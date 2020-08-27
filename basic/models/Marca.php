@@ -29,6 +29,7 @@ class Marca extends \yii\db\ActiveRecord
     {
         return [
             [['F_NOMBREMARCA'], 'string', 'max' => 100],
+            [['F_NOMBREMARCA'],'required'],
         ];
     }
 
@@ -38,8 +39,8 @@ class Marca extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'F_IDMARCA' => 'F Idmarca',
-            'F_NOMBREMARCA' => 'F Nombremarca',
+            'F_IDMARCA' => 'Código',
+            'F_NOMBREMARCA' => 'Nombre marca',
         ];
     }
 
