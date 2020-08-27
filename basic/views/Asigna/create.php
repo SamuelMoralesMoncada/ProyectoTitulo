@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Asigna */
 
-$this->title = 'Create Asigna';
-$this->params['breadcrumbs'][] = ['label' => 'Asignas', 'url' => ['index']];
+$this->title = 'Nueva asignación';
+$this->params['breadcrumbs'][] = ['label' => 'Asignaciones', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="asigna-create">

@@ -45,9 +45,9 @@ class Asigna extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'F_IDPROD' => 'F Idprod',
-            'F_IDRESP' => 'F Idresp',
-            'F_FECHAASIGNA' => 'F Fechaasigna',
+            'F_IDPROD' => 'Producto',
+            'F_IDRESP' => 'Responsable',
+            'F_FECHAASIGNA' => 'Fecha asignación',
         ];
     }
 

@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\AsignaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Asignas';
+$this->title = 'Asignación de productos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="asigna-index">
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Asigna', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Asignar nuevo', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
