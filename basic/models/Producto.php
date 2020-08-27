@@ -38,7 +38,7 @@ class Producto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['F_IDMARCA', 'F_IDCAT', 'F_IDUBICA', 'F_IDPROV'], 'required'],
+            [['F_NOMBREPROD','F_FECHAREGISTROPRO','F_IDMARCA', 'F_IDCAT', 'F_IDUBICA', 'F_IDPROV'], 'required'],
             [['F_IDMARCA', 'F_IDCAT', 'F_IDUBICA', 'F_IDPROV'], 'integer'],
             [['F_FECHAREGISTROPRO'], 'safe'],
             [['F_NOMBREPROD'], 'string', 'max' => 100],
@@ -55,13 +55,13 @@ class Producto extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'F_IDPROD' => 'F Idprod',
-            'F_IDMARCA' => 'F Idmarca',
-            'F_IDCAT' => 'F Idcat',
-            'F_IDUBICA' => 'F Idubica',
-            'F_IDPROV' => 'F Idprov',
-            'F_NOMBREPROD' => 'F Nombreprod',
-            'F_FECHAREGISTROPRO' => 'F Fecharegistropro',
+            'F_IDPROD' => 'Código',
+            'F_IDMARCA' => 'Marca',
+            'F_IDCAT' => 'Categoría',
+            'F_IDUBICA' => 'Ubicación',
+            'F_IDPROV' => 'Proveedor',
+            'F_NOMBREPROD' => 'Nombre producto',
+            'F_FECHAREGISTROPRO' => 'Fecha registro',
         ];
     }
 

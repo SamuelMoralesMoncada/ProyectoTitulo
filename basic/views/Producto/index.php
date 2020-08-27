@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Producto', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nuevo registro', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -31,8 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'F_IDCAT',
             'F_IDUBICA',
             'F_IDPROV',
-            //'F_NOMBREPROD',
-            //'F_FECHAREGISTROPRO',
+            'F_NOMBREPROD',
+            'F_FECHAREGISTROPRO',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
