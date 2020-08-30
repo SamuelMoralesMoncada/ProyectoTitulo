@@ -2,6 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\Marca;
+use app\models\Categoria;
+use app\models\Ubicacion;
+use app\models\Proveedor;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Producto */
@@ -30,10 +34,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'F_IDPROD',
-            'F_IDMARCA',
-            'F_IDCAT',
-            'F_IDUBICA',
-            'F_IDPROV',
+            [ 
+                'attribute' => 'F_IDMARCA',
+                'value' => Marca::findOne($model->F_IDMARCA)->F_NOMBREMARCA
+            ],
+            [
+                'attribute' => 'F_IDCAT',
+                'value' => Categoria::findOne($model->F_IDCAT)->F_NOMBRECAT
+            ],
+            [
+                'attribute' => 'F_IDUBICA',
+                'value' => Ubicacion::findOne($model->F_IDUBICA)->F_NOMBREUBICA
+            ],
+            [
+                'attribute' => 'F_IDPROV',
+                'value' => Proveedor::findOne($model->F_IDPROV)->F_NOMBREPROV
+            ],            
             'F_NOMBREPROD',
             'F_FECHAREGISTROPRO',
         ],
