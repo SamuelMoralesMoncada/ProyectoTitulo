@@ -8,6 +8,7 @@ use app\models\Categoria;
 use app\models\Ubicacion;
 use app\models\Proveedor;
 use kartik\select2\Select2;
+use yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Producto */
@@ -66,7 +67,11 @@ use kartik\select2\Select2;
 
             <?= $form->field($model, 'F_NOMBREPROD')->textInput(['maxlength' => true]) ?>
 
-            <?= $form->field($model, 'F_FECHAREGISTROPRO')->textInput() ?>
+            <?= $form->field($model, 'F_FECHAREGISTROPRO')->widget(DatePicker::classname(), [
+                'language' => 'ES',
+                'dateFormat' => 'yyyy-MM-dd',
+            ]) ?>
+
 
             <div class="form-group">
                 <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

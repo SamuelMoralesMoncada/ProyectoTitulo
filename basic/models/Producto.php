@@ -112,7 +112,7 @@ class Producto extends \yii\db\ActiveRecord
      */
     public function getFIDMARCA()
     {
-        return $this->hasOne(Marca::className(), ['F_IDMARCA' => 'F_IDMARCA']);
+        return $this->hasOne(Marca::className(), ['F_IDMARCA' => 'F_IDMARCA']); 
     }
 
     /**
