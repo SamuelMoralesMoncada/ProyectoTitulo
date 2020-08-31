@@ -13,21 +13,6 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-   'useFileTransport' => false,
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-   'transport' => [
-            'class' => 'Swift_SmtpTransport',
-            'host' => 'smtp.gmail.com',
-            'username' => 'smoralesm@colegioandresbello.cl',
-            'password' => 'JesusVive123!',
-            'port' => '587',
-            'encryption' => 'tls',
-        ],
-        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '2rFRnp28kH_Zoh73eAI0cuJ1ayQpHEK-',
