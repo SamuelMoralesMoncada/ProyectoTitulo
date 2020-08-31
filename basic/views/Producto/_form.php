@@ -69,8 +69,8 @@ use yii\jui\DatePicker;
 
             <?= $form->field($model, 'F_FECHAREGISTROPRO')->widget(DatePicker::classname(), [
                 'language' => 'ES',
-                'dateFormat' => 'yyyy-MM-dd',
-            ]) ?>
+                'dateFormat' => 'dd-MM-yyyy',
+            ]) ?> 
 
 
             <div class="form-group">

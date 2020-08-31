@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use app\models\Producto;
 use app\models\Responsable;
 use kartik\select2\Select2;
+use yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Asigna */
@@ -37,9 +38,12 @@ use kartik\select2\Select2;
 				        'pluginOptions' => [
 				            'allowClear' => true
 				        ],
-			    ])?>
+			    ])?>			
 
-			    <?= $form->field($model, 'F_FECHAASIGNA')->textInput() ?>
+			    <?= $form->field($model, 'F_FECHAASIGNA')->widget(DatePicker::classname(), [
+                'language' => 'ES',
+                'dateFormat' => 'dd-MM-yyyy',
+            ]) ?>
 
 			    <div class="form-group">
 			        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
