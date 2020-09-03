@@ -40,13 +40,24 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Inicio', 'url' => ['/site/index']],
             //['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Proveedor', 'url' => ['/proveedor']],
-            ['label' => 'Marca', 'url' => ['/marca']],
-            ['label' => 'Ubicación', 'url' => ['/ubicacion']],
-            ['label' => 'Responsable', 'url' => ['/responsable']],
-            ['label' => 'Asigna', 'url' => ['/asigna']],
-            ['label' => 'Categoría', 'url' => ['/categoria']],
-            ['label' => 'Producto', 'url' => ['/producto']],
+            ['label' => 'Nuevo',
+                    'url' => ['#'],
+                    'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
+                    'items' => [
+                            ['label' => 'Proveedor', 'url' => ['/proveedor/create']],
+                            ['label' => 'Ubicación', 'url' => ['/ubicacion/create']],
+                            ['label' => 'Responsable', 'url' => ['/responsable/create']],
+                            ['label' => 'Producto', 'url' => ['/producto/create']],
+                            //['label' => 'Producto', 'url' => ['/marca/create']],
+                    ]
+            ],
+            //['label' => 'Proveedor', 'url' => ['/proveedor']],
+            //['label' => 'Marca', 'url' => ['/marca']],
+            //['label' => 'Ubicación', 'url' => ['/ubicacion']],
+            //['label' => 'Responsable', 'url' => ['/responsable']],
+            ['label' => 'Asignación', 'url' => ['/asigna']],
+            //['label' => 'Categoría', 'url' => ['/categoria']],
+            //['label' => 'Producto', 'url' => ['/producto']],
             //['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]

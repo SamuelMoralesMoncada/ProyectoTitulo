@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "producto".
  *
  * @property int $F_IDPROD
- * @property int $F_IDMARCA
+ * @property string $F_NOMBREMARCA
  * @property int $F_IDCAT
  * @property int $F_IDUBICA
  * @property int $F_IDPROV
@@ -19,7 +19,6 @@ use Yii;
  * @property Responsable[] $fIDRESPs
  * @property Categoria $fIDCAT
  * @property Ubicacion $fIDUBICA
- * @property Marca $fIDMARCA
  * @property Proveedor $fIDPROV
  */
 class Producto extends \yii\db\ActiveRecord
@@ -38,13 +37,12 @@ class Producto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['F_NOMBREPROD','F_FECHAREGISTROPRO','F_IDMARCA', 'F_IDCAT', 'F_IDUBICA', 'F_IDPROV'], 'required'],
-            [['F_IDMARCA', 'F_IDCAT', 'F_IDUBICA', 'F_IDPROV'], 'integer'],
+            [['F_NOMBREMARCA', 'F_IDCAT', 'F_IDUBICA', 'F_IDPROV', 'F_FECHAREGISTROPRO','F_CANTIDADPROD'], 'required'],
+            [['F_IDCAT', 'F_IDUBICA', 'F_IDPROV','F_CANTIDADPROD'], 'integer'],
             [['F_FECHAREGISTROPRO'], 'safe'],
-            [['F_NOMBREPROD'], 'string', 'max' => 100],
+            [['F_NOMBREMARCA', 'F_NOMBREPROD'], 'string', 'max' => 100],
             [['F_IDCAT'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::className(), 'targetAttribute' => ['F_IDCAT' => 'F_IDCAT']],
             [['F_IDUBICA'], 'exist', 'skipOnError' => true, 'targetClass' => Ubicacion::className(), 'targetAttribute' => ['F_IDUBICA' => 'F_IDUBICA']],
-            [['F_IDMARCA'], 'exist', 'skipOnError' => true, 'targetClass' => Marca::className(), 'targetAttribute' => ['F_IDMARCA' => 'F_IDMARCA']],
             [['F_IDPROV'], 'exist', 'skipOnError' => true, 'targetClass' => Proveedor::className(), 'targetAttribute' => ['F_IDPROV' => 'F_IDPROV']],
         ];
     }
@@ -56,11 +54,12 @@ class Producto extends \yii\db\ActiveRecord
     {
         return [
             'F_IDPROD' => 'Código',
-            'F_IDMARCA' => 'Marca',
+            'F_NOMBREMARCA' => 'Marca',
             'F_IDCAT' => 'Categoría',
             'F_IDUBICA' => 'Ubicación',
             'F_IDPROV' => 'Proveedor',
             'F_NOMBREPROD' => 'Nombre producto',
+            'F_CANTIDADPROD' => 'Cantidad',
             'F_FECHAREGISTROPRO' => 'Fecha registro',
         ];
     }
@@ -103,16 +102,6 @@ class Producto extends \yii\db\ActiveRecord
     public function getFIDUBICA()
     {
         return $this->hasOne(Ubicacion::className(), ['F_IDUBICA' => 'F_IDUBICA']);
-    }
-
-    /**
-     * Gets query for [[FIDMARCA]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFIDMARCA()
-    {
-        return $this->hasOne(Marca::className(), ['F_IDMARCA' => 'F_IDMARCA']); 
     }
 
     /**

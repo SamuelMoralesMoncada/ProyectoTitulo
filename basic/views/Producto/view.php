@@ -2,15 +2,15 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use app\models\Marca;
 use app\models\Categoria;
 use app\models\Ubicacion;
 use app\models\Proveedor;
 
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Producto */
 
-//$this->title = $model->F_IDPROD;
+//$this->title = $model->F_NOMBREPROD;
 $this->params['breadcrumbs'][] = ['label' => 'Productos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -34,23 +34,36 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'F_IDPROD',
+            'F_NOMBREMARCA',
+            //'F_IDCAT',
             [ 
-                'attribute' => 'F_IDMARCA',
-                'value' => Marca::findOne($model->F_IDMARCA)->F_NOMBREMARCA
-            ],
-            [
                 'attribute' => 'F_IDCAT',
-                'value' => Categoria::findOne($model->F_IDCAT)->F_NOMBRECAT
-            ],
-            [
+                'value' => function($model){
+                    $marca = Categoria::findOne($model->F_IDCAT);
+                    return $marca->F_NOMBRECAT;
+                },
+                //'filter' => ArrayHelper::map(Marca::find()->all(),'F_IDMARCA','F_NOMBREMARCA'),
+            ],  
+            //'F_IDUBICA',
+            [ 
                 'attribute' => 'F_IDUBICA',
-                'value' => Ubicacion::findOne($model->F_IDUBICA)->F_NOMBREUBICA
-            ],
-            [
+                'value' => function($model){
+                    $marca = Ubicacion::findOne($model->F_IDUBICA);
+                    return $marca->F_NOMBREUBICA;
+                },
+                //'filter' => ArrayHelper::map(Marca::find()->all(),'F_IDMARCA','F_NOMBREMARCA'),
+            ], 
+            //'F_IDPROV',
+            [ 
                 'attribute' => 'F_IDPROV',
-                'value' => Proveedor::findOne($model->F_IDPROV)->F_NOMBREPROV
-            ],            
+                'value' => function($model){
+                    $marca = Proveedor::findOne($model->F_IDPROV);
+                    return $marca->F_NOMBREPROV;
+                },
+                //'filter' => ArrayHelper::map(Marca::find()->all(),'F_IDMARCA','F_NOMBREMARCA'),
+            ],
             'F_NOMBREPROD',
+            'F_CANTIDADPROD',
             'F_FECHAREGISTROPRO',
         ],
     ]) ?>

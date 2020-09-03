@@ -2,8 +2,6 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\helpers\ArrayHelper;
-use app\models\Marca;
 use app\models\Categoria;
 use app\models\Ubicacion;
 use app\models\Proveedor;
@@ -32,44 +30,35 @@ $this->params['breadcrumbs'][] = $this->title;
             //['class' => 'yii\grid\SerialColumn'],
 
             'F_IDPROD',
+            //'F_NOMBREMARCA',
             [ 
-                'attribute' => 'F_IDMARCA',
-                'value' => function($model){
-                    $marca = Marca::findOne($model->F_IDMARCA);
-                    return $marca->F_NOMBREMARCA;
-                },
-                //'filter' => ArrayHelper::map(Marca::find()->all(),'F_IDMARCA','F_NOMBREMARCA'),
-            ],    
-            //'F_IDCAT',
-            [
                 'attribute' => 'F_IDCAT',
                 'value' => function($model){
                     $marca = Categoria::findOne($model->F_IDCAT);
                     return $marca->F_NOMBRECAT;
                 },
-                //'filter' => ArrayHelper::map(Categoria::find()->all(),'F_IDCAT','F_NOMBRECAT'),
-            ],
+                //'filter' => ArrayHelper::map(Marca::find()->all(),'F_IDMARCA','F_NOMBREMARCA'),
+            ],  
             //'F_IDUBICA',
-            [
+            [ 
                 'attribute' => 'F_IDUBICA',
                 'value' => function($model){
                     $marca = Ubicacion::findOne($model->F_IDUBICA);
                     return $marca->F_NOMBREUBICA;
                 },
-                //'filter' => ArrayHelper::map(Ubicacion::find()->all(),'F_IDUBICA','F_NOMBREUBICA'),
-            ],
-
+                //'filter' => ArrayHelper::map(Marca::find()->all(),'F_IDMARCA','F_NOMBREMARCA'),
+            ], 
             //'F_IDPROV',
-            [
+            [ 
                 'attribute' => 'F_IDPROV',
                 'value' => function($model){
                     $marca = Proveedor::findOne($model->F_IDPROV);
                     return $marca->F_NOMBREPROV;
                 },
-                //'filter' => ArrayHelper::map(Proveedor::find()->all(),'F_IDPROV','F_NOMBREPROV'),
+                //'filter' => ArrayHelper::map(Marca::find()->all(),'F_IDMARCA','F_NOMBREMARCA'),
             ],
-
             'F_NOMBREPROD',
+            'F_CANTIDADPROD',
             'F_FECHAREGISTROPRO',
 
             ['class' => 'yii\grid\ActionColumn'],
