@@ -22,7 +22,7 @@ use yii\jui\DatePicker;
 
     <?= $form->field($model, 'F_ANTIGUEDADPRO')->widget(DatePicker::classname(), [
                 'language' => 'ES',
-                'dateFormat' => 'dd-MM-yyyy',
+                'dateFormat' => 'yyyy-MM-dd',
             ]) ?> 
 
     <div class="form-group">

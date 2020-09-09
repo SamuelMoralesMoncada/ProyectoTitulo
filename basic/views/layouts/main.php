@@ -38,34 +38,34 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Inicio', 'url' => ['/site/index']],
+            ['label' => 'Inicio', 'url' => ['/site/index'],'visible'=>!Yii::$app->getUser()->isGuest],
             //['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Nuevo',
                     'url' => ['#'],
                     'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
                     'items' => [
-                            ['label' => 'Proveedor', 'url' => ['/proveedor/create']],
+                            ['label' => 'Proveedor', 'url' => ['/proveedor/create'],],
                             ['label' => 'Ubicación', 'url' => ['/ubicacion/create']],
                             ['label' => 'Responsable', 'url' => ['/responsable/create']],
                             ['label' => 'Producto', 'url' => ['/producto/create']],
                             //['label' => 'Producto', 'url' => ['/marca/create']],
                     ]
-            ],
+            ,'visible'=>!Yii::$app->getUser()->isGuest],
             //['label' => 'Proveedor', 'url' => ['/proveedor']],
             //['label' => 'Marca', 'url' => ['/marca']],
             //['label' => 'Ubicación', 'url' => ['/ubicacion']],
             //['label' => 'Responsable', 'url' => ['/responsable']],
-            ['label' => 'Asignación', 'url' => ['/asigna']],
+            ['label' => 'Asignación', 'url' => ['/asigna'],'visible'=>!Yii::$app->getUser()->isGuest],
             //['label' => 'Categoría', 'url' => ['/categoria']],
             //['label' => 'Producto', 'url' => ['/producto']],
             //['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+                ['label' => 'Iniciar sesión', 'url' => ['/site/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    'Cerrar sesión (' . Yii::$app->user->identity->username . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()
