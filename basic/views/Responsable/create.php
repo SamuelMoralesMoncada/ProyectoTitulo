@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Responsable */
 
-$this->title = 'Create Responsable';
+$this->title = 'Nuevo responsable';
 $this->params['breadcrumbs'][] = ['label' => 'Responsables', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
