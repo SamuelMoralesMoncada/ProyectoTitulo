@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Proveedor */
@@ -20,9 +21,14 @@ use yii\widgets\ActiveForm;
 
 		    <?= $form->field($model, 'F_DIRECCIONPRO')->textInput(['maxlength' => true]) ?>
 
-		    <?= $form->field($model, 'F_ANTIGUEDADPRO')->textInput() ?>
+		    <!--<?= $form->field($model, 'F_ANTIGUEDADPRO')->textInput() ?>-->		
 
 		    <?= $form->field($model, 'F_FONOPRO')->textInput() ?>
+
+		    <?= $form->field($model, 'F_ANTIGUEDADPRO')->widget(DatePicker::classname(), [
+                'language' => 'ES',
+                'dateFormat' => 'yyyy-MM-dd',
+            ]) ?>
 
 		    <div class="form-group">
 		        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

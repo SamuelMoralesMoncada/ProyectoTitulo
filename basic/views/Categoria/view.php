@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Categoria */
 
-$this->title = $model->F_IDCAT;
+$this->title = 'Categoría: '.$model->F_NOMBRECAT; 
 $this->params['breadcrumbs'][] = ['label' => 'Categorías', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);

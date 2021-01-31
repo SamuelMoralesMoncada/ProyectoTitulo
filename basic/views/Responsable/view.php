@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Responsable */
 
-$this->title = $model->F_IDRESP;
+$this->title = 'Responsable: '.$model->F_NOMBRERESP;
 $this->params['breadcrumbs'][] = ['label' => 'Responsables', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);

@@ -24,8 +24,6 @@ use app\models\Proveedor;
 
             <?php $form = ActiveForm::begin(); ?>
 
-            <!--<?= $form->field($model, 'F_IDCAT')->textInput() ?>-->
-
             <?= $form->field($model, 'F_IDCAT')->widget(Select2::classname(), [
                     'data' => ArrayHelper::map(categoria::find()->all(),'F_IDCAT','F_NOMBRECAT'),
                         'language' => 'es',
@@ -34,19 +32,6 @@ use app\models\Proveedor;
                             'allowClear' => true
                         ],
                 ])?>
-
-            <!--<?= $form->field($model, 'F_IDRESP')->textInput() ?>-->
-
-            <?= $form->field($model, 'F_IDRESP')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(responsable::find()->all(),'F_IDRESP','F_NOMBRERESP'),
-                        'language' => 'es',
-                        'options' => ['placeholder' => 'Seleccione un responsable'],
-                        'pluginOptions' => [
-                            'allowClear' => true
-                        ],
-                ])?>
-
-            <!--<?= $form->field($model, 'F_IDPROV')->textInput() ?>-->
 
             <?= $form->field($model, 'F_IDPROV')->widget(Select2::classname(), [
                     'data' => ArrayHelper::map(proveedor::find()->all(),'F_IDPROV','F_NOMBREPROV'),
@@ -61,8 +46,14 @@ use app\models\Proveedor;
 
             <?= $form->field($model, 'F_NOMBREMARCA')->textInput(['maxlength' => true]) ?>
 
-            <!--<?= $form->field($model, 'F_ESTADO')->textInput(['maxlength' => true]) ?>-->
-
+            <?= $form->field($model, 'F_IDRESP')->widget(Select2::classname(), [
+                    'data' => ArrayHelper::map(responsable::find()->all(),'F_IDRESP','F_NOMBRERESP'),
+                        'language' => 'es',
+                        'options' => ['placeholder' => 'Seleccione un responsable'],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                ])?>
 
             <?= $form->field($model, 'F_ESTADO')->dropDownList(
             ['Asignado' => 'Asignado', 'De baja' => 'De baja']
@@ -72,9 +63,11 @@ use app\models\Proveedor;
 
             <!--<?= $form->field($model, 'F_FECHAREGISTROPRO')->textInput() ?>-->
 
+
+
             <?= $form->field($model, 'F_FECHAREGISTROPRO')->widget(DatePicker::classname(), [
                 'language' => 'ES',
-                'dateFormat' => 'dd-MM-yyyy',
+                'dateFormat' => 'yyyy-MM-dd',
             ]) ?> 
 
             <div class="form-group">
