@@ -32,6 +32,7 @@ class Proveedor extends \yii\db\ActiveRecord
     {
         return [
             [['F_ANTIGUEDADPRO'], 'safe'],
+            [['F_NOMBREPROV', 'F_DIRECCIONPRO', 'F_ANTIGUEDADPRO', 'F_FONOPRO'], 'required'],
             [['F_FONOPRO'], 'integer'],
             [['F_NOMBREPROV', 'F_DIRECCIONPRO'], 'string', 'max' => 100],
         ];
@@ -43,11 +44,11 @@ class Proveedor extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'F_IDPROV' => 'F Idprov',
-            'F_NOMBREPROV' => 'F Nombreprov',
-            'F_DIRECCIONPRO' => 'F Direccionpro',
-            'F_ANTIGUEDADPRO' => 'F Antiguedadpro',
-            'F_FONOPRO' => 'F Fonopro',
+            'F_IDPROV' => 'Id Proveedor',
+            'F_NOMBREPROV' => 'Nombre Proveedor',
+            'F_DIRECCIONPRO' => 'Dirección Proveedor',
+            'F_ANTIGUEDADPRO' => 'Antiguedad',
+            'F_FONOPRO' => 'Teléfono contacto',
         ];
     }
 
