@@ -47,7 +47,7 @@ AppAsset::register($this);
                             ['label' => 'Proveedor', 'url' => ['/proveedor/create'],],
                             //['label' => 'Ubicación', 'url' => ['/ubicacion/create']],
                             ['label' => 'Responsable', 'url' => ['/responsable/create']],
-                            ['label' => 'Categoria', 'url' => ['/categoria/create']],
+                            ['label' => 'Categoría', 'url' => ['/categoria/create']],
                             ['label' => 'Producto', 'url' => ['/producto/create']],
                             //['label' => 'Producto', 'url' => ['/marca/create']],
                     ]

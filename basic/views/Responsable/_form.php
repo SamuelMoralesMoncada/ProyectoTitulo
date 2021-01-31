@@ -10,13 +10,20 @@ use yii\widgets\ActiveForm;
 
 <div class="responsable-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+<table>
+    <tr>
+        <div class="col-lg-6">
+		    <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'F_NOMBRERESP')->textInput(['maxlength' => true]) ?>
+		    <?= $form->field($model, 'F_NOMBRERESP')->textInput(['maxlength' => true]) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
-    </div>
+		    <div class="form-group">
+		        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+		    </div>
+		</div>
+	</tr>
+</table>
+
 
     <?php ActiveForm::end(); ?>
 

@@ -10,13 +10,21 @@ use yii\widgets\ActiveForm;
 
 <div class="categoria-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+<table>
+    <tr>
+        <div class="col-lg-6">
 
-    <?= $form->field($model, 'F_NOMBRECAT')->textInput(['maxlength' => true]) ?>
+		    <?php $form = ActiveForm::begin(); ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
-    </div>
+		    <?= $form->field($model, 'F_NOMBRECAT')->textInput(['maxlength' => true]) ?>
+
+		    <div class="form-group">
+		        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+		    </div>
+
+		</div>
+	</tr>
+</table>
 
     <?php ActiveForm::end(); ?>
 

@@ -10,19 +10,26 @@ use yii\widgets\ActiveForm;
 
 <div class="proveedor-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+<table>
+    <tr>
+        <div class="col-lg-6">
 
-    <?= $form->field($model, 'F_NOMBREPROV')->textInput(['maxlength' => true]) ?>
+		    <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'F_DIRECCIONPRO')->textInput(['maxlength' => true]) ?>
+		    <?= $form->field($model, 'F_NOMBREPROV')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'F_ANTIGUEDADPRO')->textInput() ?>
+		    <?= $form->field($model, 'F_DIRECCIONPRO')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'F_FONOPRO')->textInput() ?>
+		    <?= $form->field($model, 'F_ANTIGUEDADPRO')->textInput() ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
-    </div>
+		    <?= $form->field($model, 'F_FONOPRO')->textInput() ?>
+
+		    <div class="form-group">
+		        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+		    </div>
+		</div>
+	</tr>
+</table>
 
     <?php ActiveForm::end(); ?>
 
