@@ -8,17 +8,17 @@ use Yii;
  * This is the model class for table "producto".
  *
  * @property int $F_IDPROD
- * @property string $F_NOMBREMARCA
  * @property int $F_IDCAT
- * @property int $F_IDUBICA
+ * @property int $F_IDRESP
  * @property int $F_IDPROV
  * @property string|null $F_NOMBREPROD
- * @property string $F_FECHAREGISTROPRO
+ * @property string|null $F_FECHAREGISTROPRO
+ * @property string|null $F_NOMBREMARCA
+ * @property string|null $F_ESTADO
+ * @property string|null $F_DESCRIPRO
  *
- * @property Asigna[] $asignas
- * @property Responsable[] $fIDRESPs
  * @property Categoria $fIDCAT
- * @property Ubicacion $fIDUBICA
+ * @property Responsable $fIDRESP
  * @property Proveedor $fIDPROV
  */
 class Producto extends \yii\db\ActiveRecord
@@ -37,12 +37,13 @@ class Producto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['F_NOMBREMARCA', 'F_IDCAT', 'F_IDUBICA', 'F_IDPROV', 'F_FECHAREGISTROPRO','F_CANTIDADPROD'], 'required'],
-            [['F_IDCAT', 'F_IDUBICA', 'F_IDPROV','F_CANTIDADPROD'], 'integer'],
+            [['F_IDCAT', 'F_IDRESP', 'F_IDPROV'], 'required'],
+            [['F_IDCAT', 'F_IDRESP', 'F_IDPROV'], 'integer'],
             [['F_FECHAREGISTROPRO'], 'safe'],
-            [['F_NOMBREMARCA', 'F_NOMBREPROD'], 'string', 'max' => 100],
+            [['F_NOMBREPROD', 'F_NOMBREMARCA', 'F_DESCRIPRO'], 'string', 'max' => 100],
+            [['F_ESTADO'], 'string', 'max' => 50],
             [['F_IDCAT'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::className(), 'targetAttribute' => ['F_IDCAT' => 'F_IDCAT']],
-            [['F_IDUBICA'], 'exist', 'skipOnError' => true, 'targetClass' => Ubicacion::className(), 'targetAttribute' => ['F_IDUBICA' => 'F_IDUBICA']],
+            [['F_IDRESP'], 'exist', 'skipOnError' => true, 'targetClass' => Responsable::className(), 'targetAttribute' => ['F_IDRESP' => 'F_IDRESP']],
             [['F_IDPROV'], 'exist', 'skipOnError' => true, 'targetClass' => Proveedor::className(), 'targetAttribute' => ['F_IDPROV' => 'F_IDPROV']],
         ];
     }
@@ -53,35 +54,16 @@ class Producto extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'F_IDPROD' => 'Código',
-            'F_NOMBREMARCA' => 'Marca',
-            'F_IDCAT' => 'Categoría',
-            'F_IDUBICA' => 'Ubicación',
-            'F_IDPROV' => 'Proveedor',
-            'F_NOMBREPROD' => 'Nombre producto',
-            'F_CANTIDADPROD' => 'Cantidad',
-            'F_FECHAREGISTROPRO' => 'Fecha registro',
+            'F_IDPROD' => 'F Idprod',
+            'F_IDCAT' => 'F Idcat',
+            'F_IDRESP' => 'F Idresp',
+            'F_IDPROV' => 'F Idprov',
+            'F_NOMBREPROD' => 'F Nombreprod',
+            'F_FECHAREGISTROPRO' => 'F Fecharegistropro',
+            'F_NOMBREMARCA' => 'F Nombremarca',
+            'F_ESTADO' => 'F Estado',
+            'F_DESCRIPRO' => 'F Descripro',
         ];
-    }
-
-    /**
-     * Gets query for [[Asignas]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAsignas()
-    {
-        return $this->hasMany(Asigna::className(), ['F_IDPROD' => 'F_IDPROD']);
-    }
-
-    /**
-     * Gets query for [[FIDRESPs]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFIDRESPs()
-    {
-        return $this->hasMany(Responsable::className(), ['F_IDRESP' => 'F_IDRESP'])->viaTable('asigna', ['F_IDPROD' => 'F_IDPROD']);
     }
 
     /**
@@ -95,13 +77,13 @@ class Producto extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[FIDUBICA]].
+     * Gets query for [[FIDRESP]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFIDUBICA()
+    public function getFIDRESP()
     {
-        return $this->hasOne(Ubicacion::className(), ['F_IDUBICA' => 'F_IDUBICA']);
+        return $this->hasOne(Responsable::className(), ['F_IDRESP' => 'F_IDRESP']);
     }
 
     /**

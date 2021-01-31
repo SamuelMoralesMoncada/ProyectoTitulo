@@ -29,7 +29,6 @@ class Categoria extends \yii\db\ActiveRecord
     {
         return [
             [['F_NOMBRECAT'], 'string', 'max' => 100],
-            [['F_NOMBRECAT'], 'required'],
         ];
     }
 
@@ -39,8 +38,8 @@ class Categoria extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'F_IDCAT' => 'Código',
-            'F_NOMBRECAT' => 'Nombre categoría',
+            'F_IDCAT' => 'F Idcat',
+            'F_NOMBRECAT' => 'F Nombrecat',
         ];
     }
 

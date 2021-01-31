@@ -17,8 +17,8 @@ class ProductoSearch extends Producto
     public function rules()
     {
         return [
-            [['F_IDPROD', 'F_IDCAT', 'F_IDUBICA', 'F_IDPROV','F_CANTIDADPROD'], 'integer'],
-            [['F_NOMBREMARCA', 'F_NOMBREPROD', 'F_FECHAREGISTROPRO'], 'safe'],
+            [['F_IDPROD', 'F_IDCAT', 'F_IDRESP', 'F_IDPROV'], 'integer'],
+            [['F_NOMBREPROD', 'F_FECHAREGISTROPRO', 'F_NOMBREMARCA', 'F_ESTADO', 'F_DESCRIPRO'], 'safe'],
         ];
     }
 
@@ -60,14 +60,15 @@ class ProductoSearch extends Producto
         $query->andFilterWhere([
             'F_IDPROD' => $this->F_IDPROD,
             'F_IDCAT' => $this->F_IDCAT,
-            'F_IDUBICA' => $this->F_IDUBICA,
+            'F_IDRESP' => $this->F_IDRESP,
             'F_IDPROV' => $this->F_IDPROV,
             'F_FECHAREGISTROPRO' => $this->F_FECHAREGISTROPRO,
-            'F_CANTIDADPROD' => $this->F_CANTIDADPROD,
         ]);
 
-        $query->andFilterWhere(['like', 'F_NOMBREMARCA', $this->F_NOMBREMARCA])
-            ->andFilterWhere(['like', 'F_NOMBREPROD', $this->F_NOMBREPROD]);
+        $query->andFilterWhere(['like', 'F_NOMBREPROD', $this->F_NOMBREPROD])
+            ->andFilterWhere(['like', 'F_NOMBREMARCA', $this->F_NOMBREMARCA])
+            ->andFilterWhere(['like', 'F_ESTADO', $this->F_ESTADO])
+            ->andFilterWhere(['like', 'F_DESCRIPRO', $this->F_DESCRIPRO]);
 
         return $dataProvider;
     }

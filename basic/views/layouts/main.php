@@ -45,7 +45,7 @@ AppAsset::register($this);
                     'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
                     'items' => [
                             ['label' => 'Proveedor', 'url' => ['/proveedor/create'],],
-                            ['label' => 'Ubicación', 'url' => ['/ubicacion/create']],
+                            //['label' => 'Ubicación', 'url' => ['/ubicacion/create']],
                             ['label' => 'Responsable', 'url' => ['/responsable/create']],
                             ['label' => 'Producto', 'url' => ['/producto/create']],
                             //['label' => 'Producto', 'url' => ['/marca/create']],
@@ -55,7 +55,7 @@ AppAsset::register($this);
             //['label' => 'Marca', 'url' => ['/marca']],
             //['label' => 'Ubicación', 'url' => ['/ubicacion']],
             //['label' => 'Responsable', 'url' => ['/responsable']],
-            ['label' => 'Asignación', 'url' => ['/asigna'],'visible'=>!Yii::$app->getUser()->isGuest],
+            ['label' => 'Lista asignaciones', 'url' => ['/producto'],'visible'=>!Yii::$app->getUser()->isGuest],
             //['label' => 'Categoría', 'url' => ['/categoria']],
             //['label' => 'Producto', 'url' => ['/producto']],
             //['label' => 'Contact', 'url' => ['/site/contact']],

@@ -17,17 +17,21 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'F_IDPROD') ?>
 
-    <?= $form->field($model, 'F_NOMBREMARCA') ?>
-
     <?= $form->field($model, 'F_IDCAT') ?>
 
-    <?= $form->field($model, 'F_IDUBICA') ?>
+    <?= $form->field($model, 'F_IDRESP') ?>
 
     <?= $form->field($model, 'F_IDPROV') ?>
 
-    <?php // echo $form->field($model, 'F_NOMBREPROD') ?>
+    <?= $form->field($model, 'F_NOMBREPROD') ?>
 
     <?php // echo $form->field($model, 'F_FECHAREGISTROPRO') ?>
+
+    <?php // echo $form->field($model, 'F_NOMBREMARCA') ?>
+
+    <?php // echo $form->field($model, 'F_ESTADO') ?>
+
+    <?php // echo $form->field($model, 'F_DESCRIPRO') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
