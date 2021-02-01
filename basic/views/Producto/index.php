@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\Categoria;
 use app\models\Responsable;
+use yii\helpers\ArrayHelper;
 use app\models\Proveedor;
 
 /* @var $this yii\web\View */
@@ -19,7 +20,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Nuevo', ['create'], ['class' => 'btn btn-success']) ?>
+
     </p>
+
+
+    
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -36,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $marca = Categoria::findOne($model->F_IDCAT);
                     return $marca->F_NOMBRECAT;
                 },
-                //'filter' => ArrayHelper::map(Marca::find()->all(),'F_IDMARCA','F_NOMBREMARCA'),
+                'filter' => ArrayHelper::map(Categoria::find()->all(),'F_IDCAT','F_NOMBRECAT'),
             ],    
             [ 
                 'attribute' => 'F_IDRESP',
@@ -44,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $marca = Responsable::findOne($model->F_IDRESP);
                     return $marca->F_NOMBRERESP;
                 },
-                //'filter' => ArrayHelper::map(Marca::find()->all(),'F_IDMARCA','F_NOMBREMARCA'),
+                'filter' => ArrayHelper::map(Responsable::find()->all(),'F_IDRESP','F_NOMBRERESP'),
             ], 
             [ 
                 'attribute' => 'F_IDPROV',
@@ -52,12 +57,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     $marca = Proveedor::findOne($model->F_IDPROV);
                     return $marca->F_NOMBREPROV;
                 },
-                //'filter' => ArrayHelper::map(Marca::find()->all(),'F_IDMARCA','F_NOMBREMARCA'),
+                'filter' => ArrayHelper::map(Proveedor::find()->all(),'F_IDPROV','F_NOMBREPROV'),
             ], 
             'F_NOMBREPROD',
             'F_FECHAREGISTROPRO',
             //'F_NOMBREMARCA',
-            'F_ESTADO',
+            [
+                'attribute' => 'F_ESTADO',
+                'filter'=> array('Asignado' => 'Asignado', 'De baja' => 'De baja'),
+            ],
+            //'F_ESTADO',
             //'F_DESCRIPRO',
 
             ['class' => 'yii\grid\ActionColumn'],
