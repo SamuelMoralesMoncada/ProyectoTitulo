@@ -22,3 +22,15 @@ No necesita servidor ni internet: basta con abrir el archivo en el navegador del
 2. Opcional: "Agregar a pantalla de inicio" para usarlo como una app.
 
 > Esta herramienta es sólo de apoyo y no reemplaza la indicación de la matrona o el médico.
+
+## ¿Dónde se guardan los datos?
+
+- **Automático:** cada contracción se guarda al instante en el navegador, en dos lugares
+  (`localStorage` e `IndexedDB`). Si uno se borra, se recupera desde el otro al abrir la página.
+  Además se pide al navegador almacenamiento persistente para que no lo limpie solo.
+- **Respaldo en archivo:** el botón *💾 Guardar respaldo* descarga `respaldo_amandita_FECHA_HORA.json`.
+  Con *📂 Restaurar respaldo* se carga ese archivo (en el mismo u otro celular); las contracciones se
+  combinan sin duplicarse.
+- Importante: abrir siempre el archivo desde el **mismo lugar y el mismo navegador**. Si se abre
+  desde la vista previa de WhatsApp o Drive, o en modo incógnito, el navegador puede tratarlo como
+  otra página distinta y no ver los datos guardados.

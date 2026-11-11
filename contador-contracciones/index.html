@@ -114,6 +114,9 @@
   }
   .actions button.danger { border-color: #c62828; color: #c62828; }
   .note { font-size: .8rem; color: var(--muted); line-height: 1.4; }
+  .backup-status { font-size: .85rem; margin: 0 0 12px; padding: 10px; border-radius: 8px; background: #e8f5e9; color: #1b5e20; }
+  .backup-status.warn { background: #fff3e0; color: #e65100; }
+  .actions + .actions { margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -181,12 +184,23 @@
   </section>
 
   <section class="card">
+    <h2>💾 Respaldo de los datos</h2>
+    <p class="backup-status" id="backupStatus">Revisando dónde se guardan los datos…</p>
+    <div class="actions">
+      <button id="btnBackup" type="button">💾 Guardar respaldo</button>
+      <button id="btnRestore" type="button">📂 Restaurar respaldo</button>
+      <input type="file" id="restoreFile" accept=".json,application/json" hidden>
+    </div>
     <div class="actions">
       <button id="btnExport" type="button">📄 Exportar CSV</button>
       <button id="btnClear" type="button" class="danger">🗑️ Empezar de cero</button>
     </div>
     <p class="note">
-      Los datos se guardan sólo en este dispositivo (navegador). Esta aplicación es una ayuda
+      Cada contracción se guarda automáticamente en este navegador (localStorage + IndexedDB), así que
+      no se borra al cerrar la página. Para no perder nada si se borra el historial del navegador o cambian
+      de celular, usen <strong>💾 Guardar respaldo</strong>: descarga un archivo <code>.json</code> que luego se
+      puede cargar con <strong>📂 Restaurar respaldo</strong>.<br><br>
+      Esta aplicación es una ayuda
       para registrar contracciones y <strong>no reemplaza la indicación de profesionales de la salud</strong>.
       Ante sangrado, pérdida de líquido, disminución de movimientos del bebé o dolor intenso, consulta de inmediato.
     </p>
@@ -210,18 +224,96 @@
 
   // ---------- Estado ----------
   // contracción: { id, start (ms), end (ms), intensity (1-3 | null) }
-  let state = load();
+  // Los datos se guardan en DOS lugares del navegador, para que no se pierdan al cerrar la página:
+  //   1) localStorage (lectura inmediata al abrir)
+  //   2) IndexedDB (base de datos del navegador, copia de seguridad)
+  // Además se puede descargar un archivo .json de respaldo y restaurarlo después.
+  const IDB_NAME = 'contador_amandita';
+  const IDB_STORE = 'datos';
+  const storageOk = { local: false, idb: false, persistent: false };
+
+  let state = loadLocal();
   let periodMinutes = 60;
   let tickHandle = null;
 
-  function load() {
+  function emptyState() {
+    return { contractions: [], current: null, pendingId: null, updatedAt: 0, lastBackup: null };
+  }
+  function isValid(data) { return data && Array.isArray(data.contractions); }
+
+  function loadLocal() {
     try {
       const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (data && Array.isArray(data.contractions)) return data;
-    } catch (e) { /* datos corruptos: empezar de cero */ }
-    return { contractions: [], current: null, pendingId: null };
+      storageOk.local = true;
+      if (isValid(data)) return Object.assign(emptyState(), data);
+    } catch (e) { /* localStorage no disponible o datos corruptos */ }
+    return emptyState();
   }
-  function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+  function save() {
+    state.updatedAt = Date.now();
+    const json = JSON.stringify(state);
+    try { localStorage.setItem(STORAGE_KEY, json); storageOk.local = true; }
+    catch (e) { storageOk.local = false; }
+    idbPut(json);
+    renderBackupStatus();
+  }
+
+  // --- IndexedDB ---
+  function idbOpen() {
+    return new Promise((resolve, reject) => {
+      if (!window.indexedDB) return reject(new Error('sin IndexedDB'));
+      const req = indexedDB.open(IDB_NAME, 1);
+      req.onupgradeneeded = () => req.result.createObjectStore(IDB_STORE);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+  async function idbPut(json) {
+    try {
+      const db = await idbOpen();
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction(IDB_STORE, 'readwrite');
+        tx.objectStore(IDB_STORE).put(json, 'state');
+        tx.oncomplete = resolve;
+        tx.onerror = () => reject(tx.error);
+      });
+      db.close();
+      storageOk.idb = true;
+    } catch (e) { storageOk.idb = false; }
+    renderBackupStatus();
+  }
+  async function idbGet() {
+    try {
+      const db = await idbOpen();
+      const json = await new Promise((resolve, reject) => {
+        const req = db.transaction(IDB_STORE, 'readonly').objectStore(IDB_STORE).get('state');
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+      db.close();
+      storageOk.idb = true;
+      const data = json ? JSON.parse(json) : null;
+      return isValid(data) ? data : null;
+    } catch (e) { storageOk.idb = false; return null; }
+  }
+
+  // Al abrir: si IndexedDB tiene datos más nuevos (p. ej. se borró localStorage), se recuperan.
+  async function syncFromIdb() {
+    const fromIdb = await idbGet();
+    if (fromIdb && (fromIdb.updatedAt || 0) > (state.updatedAt || 0)) {
+      state = Object.assign(emptyState(), fromIdb);
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+      renderAll();
+    } else if (state.updatedAt) {
+      idbPut(JSON.stringify(state));
+    }
+    // Pedir al navegador que no borre estos datos automáticamente
+    if (navigator.storage && navigator.storage.persist) {
+      try { storageOk.persistent = await navigator.storage.persist(); } catch (e) {}
+    }
+    renderBackupStatus();
+  }
 
   // ---------- Utilidades ----------
   function fmtDuration(ms) {
@@ -392,7 +484,7 @@
 
   function clearAll() {
     if (!confirm('¿Borrar TODO el diario de Amandita? No se puede deshacer.')) return;
-    state = { contractions: [], current: null, pendingId: null };
+    state = Object.assign(emptyState(), { lastBackup: state.lastBackup });
     save();
     renderAll();
   }
@@ -416,6 +508,69 @@
     URL.revokeObjectURL(a.href);
   }
 
+  // ---------- Respaldo en archivo ----------
+  function stamp(d) {
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
+  }
+
+  function downloadBackup() {
+    const now = Date.now();
+    const data = { app: 'contador-contracciones-amandita', version: 1, exportedAt: now,
+                   contractions: state.contractions };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `respaldo_amandita_${stamp(new Date(now))}.json`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    state.lastBackup = now;
+    save();
+  }
+
+  function restoreBackup(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      let data;
+      try { data = JSON.parse(reader.result); } catch (e) { data = null; }
+      if (!isValid(data)) { alert('Ese archivo no parece un respaldo del contador de Amandita 🤔'); return; }
+      const valid = data.contractions.filter(c =>
+        c && c.id && Number.isFinite(c.start) && Number.isFinite(c.end) && c.end >= c.start &&
+        (c.intensity == null || [1, 2, 3].includes(c.intensity)));
+      // Se combinan: se agregan las que no existen (por id), sin duplicar
+      const ids = new Set(state.contractions.map(c => c.id));
+      const nuevas = valid.filter(c => !ids.has(c.id))
+        .map(c => ({ id: String(c.id), start: c.start, end: c.end, intensity: c.intensity ?? null }));
+      state.contractions.push(...nuevas);
+      save();
+      renderAll();
+      alert(`Respaldo cargado ✅ Se agregaron ${nuevas.length} contracciones` +
+            (valid.length - nuevas.length ? ` (${valid.length - nuevas.length} ya estaban).` : '.'));
+    };
+    reader.readAsText(file);
+  }
+
+  function renderBackupStatus() {
+    const el = $('backupStatus');
+    const where = [];
+    if (storageOk.local) where.push('localStorage');
+    if (storageOk.idb) where.push('IndexedDB');
+    const last = state.lastBackup
+      ? `Último respaldo en archivo: ${fmtDate(state.lastBackup)} ${fmtTime(state.lastBackup)}.`
+      : 'Todavía no han guardado un respaldo en archivo.';
+    if (!where.length) {
+      el.className = 'backup-status warn';
+      el.textContent = '⚠️ Este navegador no permite guardar datos (¿modo incógnito?). ' +
+        'Si cierran la página se pierden: usen "Guardar respaldo" seguido. ' + last;
+      return;
+    }
+    const pendientes = state.contractions.filter(c => !state.lastBackup || c.start > state.lastBackup).length;
+    el.className = 'backup-status' + (pendientes >= 5 ? ' warn' : '');
+    el.textContent = `✅ Guardado automáticamente en este celular (${where.join(' + ')})` +
+      (storageOk.persistent ? ', protegido contra borrado automático' : '') + '. ' + last +
+      (pendientes >= 5 ? ` Hay ${pendientes} contracciones nuevas sin respaldo en archivo.` : '');
+  }
+
   function showCheer() {
     $('cheer').textContent = CHEERS[Math.floor(Math.random() * CHEERS.length)];
   }
@@ -437,11 +592,23 @@
   });
   $('btnExport').addEventListener('click', exportCSV);
   $('btnClear').addEventListener('click', clearAll);
+  $('btnBackup').addEventListener('click', downloadBackup);
+  $('btnRestore').addEventListener('click', () => $('restoreFile').click());
+  $('restoreFile').addEventListener('change', e => {
+    if (e.target.files[0]) restoreBackup(e.target.files[0]);
+    e.target.value = '';
+  });
+  // Si se usa en dos pestañas, mantenerlas sincronizadas
+  window.addEventListener('storage', e => {
+    if (e.key === STORAGE_KEY) { state = loadLocal(); renderAll(); }
+  });
 
   // Refresco cada segundo (cronómetro y periodo móvil)
   tickHandle = setInterval(() => { renderTimer(); renderStats(); }, 1000);
   showCheer();
   renderAll();
+  renderBackupStatus();
+  syncFromIdb();
 })();
 </script>
 </body>
