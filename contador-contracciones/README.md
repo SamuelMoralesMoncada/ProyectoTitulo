@@ -1,4 +1,4 @@
-# Contador de Contracciones
+# Contador de contracciones de Amandita 🍼
 
 Aplicación web de un solo archivo (`index.html`) para registrar contracciones durante el embarazo.
 No necesita servidor ni internet: basta con abrir el archivo en el navegador del celular o computador.
