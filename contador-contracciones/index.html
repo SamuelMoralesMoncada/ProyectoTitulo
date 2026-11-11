@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#c2185b">
+<!-- Para instalarla como app en iPhone/Android ("Agregar a pantalla de inicio") -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Amandita">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
 <title>Contador de contracciones de Amandita</title>
 <style>
   :root {
@@ -189,7 +197,7 @@
     <div class="actions">
       <button id="btnBackup" type="button">💾 Guardar respaldo</button>
       <button id="btnRestore" type="button">📂 Restaurar respaldo</button>
-      <input type="file" id="restoreFile" accept=".json,application/json" hidden>
+      <input type="file" id="restoreFile" hidden>
     </div>
     <div class="actions">
       <button id="btnExport" type="button">📄 Exportar CSV</button>
@@ -198,7 +206,7 @@
     <p class="note">
       Cada contracción se guarda automáticamente en este navegador (localStorage + IndexedDB), así que
       no se borra al cerrar la página. Para no perder nada si se borra el historial del navegador o cambian
-      de celular, usen <strong>💾 Guardar respaldo</strong>: descarga un archivo <code>.json</code> que luego se
+      de celular, usen <strong>💾 Guardar respaldo</strong>: guarda un archivo <code>.json</code> (en iPhone elijan <em>Guardar en Archivos</em> y la carpeta) que luego se
       puede cargar con <strong>📂 Restaurar respaldo</strong>.<br><br>
       Esta aplicación es una ayuda
       para registrar contracciones y <strong>no reemplaza la indicación de profesionales de la salud</strong>.
@@ -514,18 +522,34 @@
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
   }
 
-  function downloadBackup() {
+  async function downloadBackup() {
     const now = Date.now();
     const data = { app: 'contador-contracciones-amandita', version: 1, exportedAt: now,
                    contractions: state.contractions };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const name = `respaldo_amandita_${stamp(new Date(now))}.json`;
+    const json = JSON.stringify(data, null, 2);
+    const markDone = () => { state.lastBackup = now; save(); };
+
+    // iPhone / Android: abrir el menú "Compartir" para elegir "Guardar en Archivos" y la carpeta
+    const file = new File([json], name, { type: 'application/json' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: 'Respaldo contracciones Amandita' });
+        markDone();
+        return;
+      } catch (e) {
+        if (e.name === 'AbortError') return; // canceló el menú
+        // si falla por otro motivo, se intenta la descarga normal
+      }
+    }
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `respaldo_amandita_${stamp(new Date(now))}.json`;
+    a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+    a.download = name;
+    document.body.appendChild(a);
     a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    state.lastBackup = now;
-    save();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    markDone();
   }
 
   function restoreBackup(file) {
