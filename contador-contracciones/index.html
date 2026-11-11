@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#c2185b">
+<title>Contador de Contracciones</title>
+<style>
+  :root {
+    --primary: #c2185b;
+    --primary-dark: #880e4f;
+    --stop: #2e7d32;
+    --bg: #fdf3f7;
+    --card: #ffffff;
+    --text: #2b2b2b;
+    --muted: #777;
+    --leve: #81c784;
+    --moderada: #ffb74d;
+    --fuerte: #e57373;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    background: var(--primary);
+    color: #fff;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  header h1 { margin: 0; font-size: 1.3rem; }
+  main { max-width: 720px; margin: 0 auto; padding: 16px; }
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  }
+  .card h2 { margin: 0 0 12px; font-size: 1.05rem; color: var(--primary-dark); }
+
+  /* Botón principal */
+  .timer-area { text-align: center; }
+  #btnMain {
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(194,24,91,.35);
+    transition: transform .1s, background .2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #btnMain:active { transform: scale(.96); }
+  #btnMain.running { background: var(--stop); box-shadow: 0 6px 18px rgba(46,125,50,.35); animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(46,125,50,.5); } 50% { box-shadow: 0 0 0 18px rgba(46,125,50,0); } }
+  #btnMain .big { display: block; font-size: 2.2rem; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  #sinceLast { margin-top: 12px; color: var(--muted); }
+
+  /* Intensidad */
+  #intensityPanel { display: none; text-align: center; }
+  #intensityPanel.show { display: block; }
+  .intensity-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+  .intensity-buttons button {
+    flex: 1 1 120px;
+    padding: 16px 10px;
+    border: none; border-radius: 10px;
+    font-size: 1.05rem; font-weight: bold; color: #222; cursor: pointer;
+  }
+  .btn-leve { background: var(--leve); }
+  .btn-moderada { background: var(--moderada); }
+  .btn-fuerte { background: var(--fuerte); }
+
+  /* Estadísticas */
+  .period-select { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .period-select button {
+    border: 1px solid var(--primary); background: #fff; color: var(--primary);
+    padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: .9rem;
+  }
+  .period-select button.active { background: var(--primary); color: #fff; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+  .stat { background: var(--bg); border-radius: 10px; padding: 12px; text-align: center; }
+  .stat .value { font-size: 1.5rem; font-weight: bold; color: var(--primary-dark); font-variant-numeric: tabular-nums; }
+  .stat .label { font-size: .8rem; color: var(--muted); margin-top: 4px; }
+
+  .alert {
+    display: none; margin-top: 12px; padding: 12px; border-radius: 10px;
+    background: #ffebee; border-left: 5px solid #c62828; color: #b71c1c; font-weight: 600;
+  }
+  .alert.show { display: block; }
+
+  /* Tabla */
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+  th, td { white-space: nowrap; padding: 8px 6px; text-align: left; border-bottom: 1px solid #eee; font-variant-numeric: tabular-nums; }
+  th { color: var(--muted); font-weight: 600; font-size: .8rem; text-transform: uppercase; }
+  .badge { padding: 3px 8px; border-radius: 12px; font-size: .8rem; font-weight: 600; }
+  .badge-1 { background: var(--leve); }
+  .badge-2 { background: var(--moderada); }
+  .badge-3 { background: var(--fuerte); }
+  .del { background: none; border: none; color: #c62828; cursor: pointer; font-size: 1.1rem; }
+  .empty { color: var(--muted); text-align: center; padding: 16px; }
+
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .actions button {
+    flex: 1 1 140px; padding: 10px; border-radius: 8px; cursor: pointer; font-size: .95rem;
+    border: 1px solid var(--primary); background: #fff; color: var(--primary);
+  }
+  .actions button.danger { border-color: #c62828; color: #c62828; }
+  .note { font-size: .8rem; color: var(--muted); line-height: 1.4; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🤰 Contador de Contracciones</h1>
+</header>
+
+<main>
+  <!-- Cronómetro -->
+  <section class="card timer-area">
+    <button id="btnMain" type="button">
+      <span id="btnLabel">Iniciar contracción</span>
+      <span class="big" id="timer">00:00</span>
+    </button>
+    <div id="sinceLast">Aún no hay contracciones registradas</div>
+  </section>
+
+  <!-- Selección de intensidad -->
+  <section class="card" id="intensityPanel">
+    <h2>¿Qué tan intensa fue la contracción?</h2>
+    <div>Duración: <strong id="lastDuration">--</strong></div>
+    <div class="intensity-buttons">
+      <button class="btn-leve" data-intensity="1">Leve</button>
+      <button class="btn-moderada" data-intensity="2">Moderada</button>
+      <button class="btn-fuerte" data-intensity="3">Fuerte</button>
+    </div>
+  </section>
+
+  <!-- Estadísticas -->
+  <section class="card">
+    <h2>Resumen del periodo</h2>
+    <div class="period-select" id="periodSelect">
+      <button data-minutes="30">30 min</button>
+      <button data-minutes="60" class="active">1 hora</button>
+      <button data-minutes="120">2 horas</button>
+      <button data-minutes="0">Todo</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="value" id="stCount">0</div><div class="label">Contracciones</div></div>
+      <div class="stat"><div class="value" id="stAvgDur">--</div><div class="label">Duración promedio</div></div>
+      <div class="stat"><div class="value" id="stAvgInt">--</div><div class="label">Frecuencia promedio<br>(inicio a inicio)</div></div>
+      <div class="stat"><div class="value" id="stIntensity">--</div><div class="label">Intensidad promedio</div></div>
+    </div>
+    <div class="alert" id="alert511">
+      ⚠️ Patrón 5-1-1 detectado: contracciones cada 5 minutos o menos, de 1 minuto o más,
+      durante al menos 1 hora. Contacta a tu matrona/médico o acude al centro de salud.
+    </div>
+  </section>
+
+  <!-- Historial -->
+  <section class="card">
+    <h2>Historial</h2>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Inicio</th><th>Duración</th><th>Frecuencia</th><th>Intensidad</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="actions">
+      <button id="btnExport" type="button">📄 Exportar CSV</button>
+      <button id="btnClear" type="button" class="danger">🗑️ Borrar todo</button>
+    </div>
+    <p class="note">
+      Los datos se guardan sólo en este dispositivo (navegador). Esta aplicación es una ayuda
+      para registrar contracciones y <strong>no reemplaza la indicación de profesionales de la salud</strong>.
+      Ante sangrado, pérdida de líquido, disminución de movimientos del bebé o dolor intenso, consulta de inmediato.
+    </p>
+  </section>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  const STORAGE_KEY = 'contracciones_v1';
+  const INTENSITY_NAMES = { 1: 'Leve', 2: 'Moderada', 3: 'Fuerte' };
+
+  // ---------- Estado ----------
+  // contracción: { id, start (ms), end (ms), intensity (1-3 | null) }
+  let state = load();
+  let periodMinutes = 60;
+  let tickHandle = null;
+
+  function load() {
+    try {
+      const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (data && Array.isArray(data.contractions)) return data;
+    } catch (e) { /* datos corruptos: empezar de cero */ }
+    return { contractions: [], current: null, pendingId: null };
+  }
+  function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+  // ---------- Utilidades ----------
+  function fmtDuration(ms) {
+    if (ms == null || isNaN(ms)) return '--';
+    const total = Math.round(ms / 1000);
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    const pad = n => String(n).padStart(2, '0');
+    return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+  }
+  function fmtTime(ms) {
+    return new Date(ms).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+  }
+  function fmtDate(ms) {
+    return new Date(ms).toLocaleDateString('es-CL');
+  }
+  const $ = id => document.getElementById(id);
+
+  // Contracciones ordenadas por inicio
+  function sorted() { return [...state.contractions].sort((a, b) => a.start - b.start); }
+
+  // Frecuencia = tiempo entre el inicio de una contracción y el inicio de la anterior
+  function withIntervals() {
+    const list = sorted();
+    return list.map((c, i) => ({
+      ...c,
+      duration: c.end - c.start,
+      interval: i > 0 ? c.start - list[i - 1].start : null
+    }));
+  }
+
+  // ---------- Cálculo de estadísticas ----------
+  function computeStats(minutes) {
+    const all = withIntervals();
+    const now = Date.now();
+    const list = minutes > 0 ? all.filter(c => c.start >= now - minutes * 60000) : all;
+
+    const avg = arr => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
+    const durations = list.map(c => c.duration);
+    // Sólo intervalos cuya contracción previa también está dentro del periodo
+    const intervals = list.slice(1).map(c => c.interval);
+    const intensities = list.map(c => c.intensity).filter(v => v != null);
+
+    return {
+      count: list.length,
+      avgDuration: avg(durations),
+      avgInterval: avg(intervals),
+      avgIntensity: avg(intensities)
+    };
+  }
+
+  // Regla 5-1-1: en la última hora, contracciones cada <= 5 min y de >= 1 min,
+  // con registros que cubran al menos 1 hora.
+  function check511() {
+    const all = withIntervals();
+    const now = Date.now();
+    const lastHour = all.filter(c => c.start >= now - 65 * 60000); // pequeño margen
+    if (lastHour.length < 6) return false;
+    const span = lastHour[lastHour.length - 1].start - lastHour[0].start;
+    if (span < 55 * 60000) return false;
+    const avgDur = lastHour.reduce((a, c) => a + c.duration, 0) / lastHour.length;
+    const ints = lastHour.slice(1).map(c => c.interval);
+    const avgInt = ints.reduce((a, b) => a + b, 0) / ints.length;
+    return avgInt <= 5 * 60000 + 15000 && avgDur >= 60000; // margen de 15 s
+  }
+
+  // ---------- Render ----------
+  function renderTimer() {
+    const btn = $('btnMain');
+    if (state.current) {
+      btn.classList.add('running');
+      $('btnLabel').textContent = 'Terminar contracción';
+      $('timer').textContent = fmtDuration(Date.now() - state.current);
+    } else {
+      btn.classList.remove('running');
+      $('btnLabel').textContent = 'Iniciar contracción';
+      $('timer').textContent = '00:00';
+    }
+    const list = sorted();
+    if (list.length) {
+      const last = list[list.length - 1];
+      $('sinceLast').textContent = state.current
+        ? `Desde el inicio de la anterior: ${fmtDuration(state.current - last.start)}`
+        : `Última contracción terminó hace ${fmtDuration(Date.now() - last.end)}`;
+    } else {
+      $('sinceLast').textContent = state.current ? 'Primera contracción en curso…' : 'Aún no hay contracciones registradas';
+    }
+  }
+
+  function renderStats() {
+    const s = computeStats(periodMinutes);
+    $('stCount').textContent = s.count;
+    $('stAvgDur').textContent = fmtDuration(s.avgDuration);
+    $('stAvgInt').textContent = fmtDuration(s.avgInterval);
+    $('stIntensity').textContent = s.avgIntensity == null
+      ? '--'
+      : `${INTENSITY_NAMES[Math.round(s.avgIntensity)]} (${s.avgIntensity.toFixed(1)})`;
+    $('alert511').classList.toggle('show', check511());
+  }
+
+  function renderHistory() {
+    const body = $('historyBody');
+    const list = withIntervals();
+    if (!list.length) {
+      body.innerHTML = '<tr><td colspan="6" class="empty">Sin registros</td></tr>';
+      return;
+    }
+    body.innerHTML = list.map((c, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${fmtTime(c.start)}</td>
+        <td>${fmtDuration(c.duration)}</td>
+        <td>${c.interval == null ? '--' : fmtDuration(c.interval)}</td>
+        <td>${c.intensity
+              ? `<span class="badge badge-${c.intensity}">${INTENSITY_NAMES[c.intensity]}</span>`
+              : '<span class="note">sin dato</span>'}</td>
+        <td><button class="del" data-id="${c.id}" title="Eliminar">✕</button></td>
+      </tr>`).reverse().join('');
+  }
+
+  function renderIntensityPanel() {
+    const pending = state.contractions.find(c => c.id === state.pendingId);
+    $('intensityPanel').classList.toggle('show', !!pending);
+    if (pending) $('lastDuration').textContent = fmtDuration(pending.end - pending.start);
+  }
+
+  function renderAll() {
+    renderTimer();
+    renderStats();
+    renderHistory();
+    renderIntensityPanel();
+  }
+
+  // ---------- Acciones ----------
+  function toggleContraction() {
+    if (!state.current) {
+      state.current = Date.now();
+      state.pendingId = null; // si no eligió intensidad de la anterior, se queda "sin dato"
+    } else {
+      const c = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+                  start: state.current, end: Date.now(), intensity: null };
+      state.contractions.push(c);
+      state.current = null;
+      state.pendingId = c.id;
+      if (navigator.vibrate) navigator.vibrate(100);
+    }
+    save();
+    renderAll();
+  }
+
+  function setIntensity(value) {
+    const c = state.contractions.find(c => c.id === state.pendingId);
+    if (c) c.intensity = value;
+    state.pendingId = null;
+    save();
+    renderAll();
+  }
+
+  function deleteContraction(id) {
+    if (!confirm('¿Eliminar esta contracción?')) return;
+    state.contractions = state.contractions.filter(c => c.id !== id);
+    if (state.pendingId === id) state.pendingId = null;
+    save();
+    renderAll();
+  }
+
+  function clearAll() {
+    if (!confirm('¿Borrar TODOS los registros? Esta acción no se puede deshacer.')) return;
+    state = { contractions: [], current: null, pendingId: null };
+    save();
+    renderAll();
+  }
+
+  function exportCSV() {
+    const list = withIntervals();
+    if (!list.length) { alert('No hay registros para exportar.'); return; }
+    const rows = [['N°', 'Fecha', 'Inicio', 'Fin', 'Duración (seg)', 'Frecuencia (min)', 'Intensidad']];
+    list.forEach((c, i) => rows.push([
+      i + 1, fmtDate(c.start), fmtTime(c.start), fmtTime(c.end),
+      Math.round(c.duration / 1000),
+      c.interval == null ? '' : (c.interval / 60000).toFixed(1),
+      c.intensity ? INTENSITY_NAMES[c.intensity] : ''
+    ]));
+    const csv = '﻿' + rows.map(r => r.join(';')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `contracciones_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  // ---------- Eventos ----------
+  $('btnMain').addEventListener('click', toggleContraction);
+  document.querySelectorAll('[data-intensity]').forEach(b =>
+    b.addEventListener('click', () => setIntensity(Number(b.dataset.intensity))));
+  $('historyBody').addEventListener('click', e => {
+    const btn = e.target.closest('.del');
+    if (btn) deleteContraction(btn.dataset.id);
+  });
+  $('periodSelect').addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    periodMinutes = Number(btn.dataset.minutes);
+    document.querySelectorAll('#periodSelect button').forEach(b => b.classList.toggle('active', b === btn));
+    renderStats();
+  });
+  $('btnExport').addEventListener('click', exportCSV);
+  $('btnClear').addEventListener('click', clearAll);
+
+  // Refresco cada segundo (cronómetro y periodo móvil)
+  tickHandle = setInterval(() => { renderTimer(); renderStats(); }, 1000);
+  renderAll();
+})();
+</script>
+</body>
+</html>
