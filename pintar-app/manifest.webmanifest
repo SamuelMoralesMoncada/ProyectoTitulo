@@ -1,0 +1,15 @@
+{
+  "name": "¡A pintar!",
+  "short_name": "A pintar",
+  "description": "Dibujos para pintar pensados para niños y niñas de 2 a 3 años.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#FFF4D6",
+  "theme_color": "#FFF4D6",
+  "lang": "es",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

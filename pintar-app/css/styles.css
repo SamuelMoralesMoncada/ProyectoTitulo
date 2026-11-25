@@ -1,0 +1,310 @@
+/* ============================================================
+   ¡A pintar!  ·  Estilos
+   Pensado para 2-3 años: objetivos táctiles grandes (≥ 56 px),
+   colores alegres, sin texto pequeño, sin menús ni scroll en el lienzo.
+   ============================================================ */
+
+:root {
+  --bg: #FFF4D6;
+  --ink: #2b2b3a;
+  --radius: 28px;
+  --shadow: 0 6px 0 rgba(0, 0, 0, .14), 0 12px 24px rgba(0, 0, 0, .10);
+  --font: ui-rounded, "Nunito", "Baloo 2", "Comic Sans MS", "Chalkboard SE", "Trebuchet MS", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  background-image: radial-gradient(rgba(255, 170, 60, .16) 2px, transparent 2.5px);
+  background-size: 34px 34px;
+  color: var(--ink);
+  font-family: var(--font);
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+#app { min-height: 100dvh; }
+
+.view {
+  min-height: 100dvh;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+           max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  animation: view-in .35s cubic-bezier(.2, .9, .3, 1.2);
+}
+@keyframes view-in { from { opacity: 0; transform: scale(.96); } }
+
+/* ---------- Botones ---------- */
+button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+
+.btn {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px;
+  border: 0;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  transition: transform .12s, box-shadow .12s, background .2s;
+}
+.btn:active { transform: translateY(4px) scale(.96); box-shadow: 0 2px 0 rgba(0, 0, 0, .14); }
+.btn-icon { line-height: 1; font-size: 2.4rem; }
+.btn-label { font-weight: 800; font-size: .95rem; }
+
+.btn-round { width: 84px; height: 84px; border-radius: 50%; flex: none; }
+
+/* ---------- Inicio ---------- */
+.home-header {
+  display: flex; align-items: center; justify-content: center; position: relative;
+  padding: 8px 100px 20px;
+}
+.title {
+  margin: 0;
+  font-size: clamp(3rem, 10vmin, 6rem);
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-align: center;
+  line-height: 1;
+}
+.title span {
+  display: inline-block;
+  color: hsl(calc(var(--i) * 38) 85% 55%);
+  -webkit-text-stroke: 3px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0 5px 0 rgba(0, 0, 0, .15);
+  animation: bounce 2.4s ease-in-out infinite;
+  animation-delay: calc(var(--i) * .12s);
+}
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-12px); } }
+.sound-toggle { position: absolute; right: 0; top: 0; }
+
+.grid {
+  display: grid;
+  gap: clamp(14px, 3vmin, 28px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, clamp(160px, 26vw, 280px)), 1fr));
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  display: flex; flex-direction: column; align-items: stretch; gap: 12px;
+  padding: 14px 14px 18px;
+  border: 0;
+  border-radius: 36px;
+  background: var(--c, #fff);
+  box-shadow: var(--shadow);
+  transition: transform .15s;
+  animation: pop-in .45s cubic-bezier(.2, .9, .3, 1.4) both;
+}
+.card:nth-child(2) { animation-delay: .05s; }
+.card:nth-child(3) { animation-delay: .1s; }
+.card:nth-child(4) { animation-delay: .15s; }
+.card:nth-child(5) { animation-delay: .2s; }
+.card:active { transform: scale(.95); }
+@keyframes pop-in { from { opacity: 0; transform: scale(.6); } }
+
+.card-label {
+  font-size: clamp(1.3rem, 3.6vmin, 2rem);
+  font-weight: 900;
+  text-align: center;
+  color: #fff;
+  -webkit-text-stroke: 1.5px rgba(0, 0, 0, .35);
+  paint-order: stroke fill;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, .18);
+}
+.grid.drawings { grid-template-columns: repeat(auto-fit, minmax(min(100%, clamp(150px, 21vw, 260px)), 1fr)); }
+.category .card { background: #fff; outline: 8px solid var(--c); outline-offset: -8px; }
+.category .card-label { color: var(--ink); -webkit-text-stroke: 0; text-shadow: none; }
+
+.thumb {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 26px;
+  background: #fff;
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: none;
+}
+.thumb > svg, .thumb > img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.thumb > .outline { mix-blend-mode: multiply; }
+
+/* ---------- Categoría ---------- */
+.bar {
+  display: flex; align-items: center; gap: 20px;
+  max-width: 1200px; margin: 0 auto 22px;
+}
+.bar-title {
+  margin: 0;
+  font-size: clamp(2rem, 6vmin, 3.4rem);
+  font-weight: 900;
+  color: var(--c);
+  -webkit-text-stroke: 2.5px var(--ink);
+  paint-order: stroke fill;
+}
+
+/* ---------- Dibujo (común) ---------- */
+.drawing { display: block; }
+.drawing .r {
+  fill: #fff;
+  stroke: var(--ink);
+  stroke-width: 7;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition: fill .22s ease-out;
+}
+.drawing .r.bg { stroke: none; }
+.drawing .d { fill: var(--ink); pointer-events: none; }
+.drawing .l {
+  fill: none; stroke: var(--ink); stroke-width: 7;
+  stroke-linecap: round; stroke-linejoin: round; pointer-events: none;
+}
+.drawing .just-filled { animation: filled .35s ease-out; }
+@keyframes filled { 40% { stroke-width: 12; } }
+
+/* ---------- Pantalla de pintar ---------- */
+.paint {
+  --tool: clamp(44px, calc((100dvh - 120px) / 6.6), 96px);
+  --sw: clamp(46px, calc((100dvh - 100px) / 7), 90px);
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: clamp(10px, 2vmin, 24px);
+  overflow: hidden;
+}
+
+.side { display: flex; min-height: 0; }
+
+.tools {
+  flex-direction: column; flex-wrap: wrap; align-content: flex-start; align-items: center;
+  gap: 10px;
+}
+.tools .btn-round { width: var(--tool); height: var(--tool); }
+.btn-tool { width: var(--tool); height: var(--tool); border-radius: 26%; }
+.tools .btn-icon { font-size: calc(var(--tool) * .44); }
+.btn-tool .btn-label { font-size: max(11px, calc(var(--tool) * .16)); }
+.btn-tool.selected {
+  background: var(--c);
+  box-shadow: 0 0 0 5px #fff, 0 0 0 9px var(--ink), var(--shadow);
+  transform: scale(1.06);
+}
+.btn-back { background: var(--c); }
+.btn-save { width: calc(var(--tool) * .8) !important; height: calc(var(--tool) * .8) !important; opacity: .75; margin-top: auto; }
+.btn-save .btn-icon { font-size: calc(var(--tool) * .34) !important; }
+.btn-save.pressing { animation: press-fill var(--press) linear forwards; }
+@keyframes press-fill { to { box-shadow: inset 0 0 0 calc(var(--tool) * .4) #FFD54F; } }
+
+.btn-tool.armed { background: #FF6B6B; animation: shake .35s ease-in-out infinite; }
+.btn-tool.nope { animation: shake .3s ease-in-out; }
+@keyframes shake { 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
+
+.palette {
+  display: grid;
+  grid-template-columns: repeat(2, var(--sw));
+  grid-auto-rows: var(--sw);
+  gap: 10px;
+  align-content: center;
+  padding: 6px;
+}
+.swatch {
+  width: var(--sw); height: var(--sw);
+  border-radius: 50%;
+  border: 5px solid #fff;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, .2), 0 0 0 2px rgba(0, 0, 0, .12);
+  transition: transform .15s cubic-bezier(.2, .9, .3, 1.6);
+}
+.swatch:active { transform: scale(.9); }
+.swatch.selected {
+  transform: scale(1.12);
+  box-shadow: 0 0 0 5px var(--ink), 0 6px 0 rgba(0, 0, 0, .2);
+  z-index: 1;
+}
+.swatch.rainbow {
+  background: conic-gradient(#FF4B4B, #FF9A2E, #FFE135, #2DB35A, #5AD1FF, #3A6FF2, #9B5CF6, #FF7EC4, #FF4B4B);
+}
+
+.stage-wrap {
+  container-type: size;
+  min-width: 0; min-height: 0;
+  display: grid; place-items: center;
+}
+.stage {
+  position: relative;
+  width: min(100cqw, 100cqh);
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: 0 0 0 8px #fff, 0 0 0 12px var(--c), 0 16px 30px rgba(0, 0, 0, .15);
+  overflow: hidden;
+  isolation: isolate;
+  touch-action: none;
+  cursor: pointer;
+}
+.stage[data-tool="brush"] { cursor: crosshair; }
+.stage > svg, .stage > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.drawing.outline { pointer-events: none; mix-blend-mode: multiply; }
+.drawing.outline .r { transition: none; }
+
+.ripple {
+  position: absolute;
+  width: 30px; height: 30px; margin: -15px 0 0 -15px;
+  border-radius: 50%;
+  border: 6px solid var(--rc);
+  pointer-events: none;
+  animation: ripple .5s ease-out forwards;
+  z-index: 2;
+}
+@keyframes ripple { to { transform: scale(5); opacity: 0; } }
+
+/* Retrato (tablet vertical / teléfono): herramientas arriba, colores abajo */
+@media (orientation: portrait) {
+  .paint {
+    --tool: clamp(50px, calc((100vw - 110px) / 7), 96px);
+    --sw: clamp(42px, calc((100vw - 120px) / 7), 92px);
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+  .tools { flex-direction: row; flex-wrap: nowrap; justify-content: center; }
+  .btn-save { margin-top: 0; margin-left: auto; }
+  .palette {
+    grid-template-columns: repeat(7, var(--sw));
+    grid-auto-rows: var(--sw);
+    justify-content: center;
+  }
+}
+
+/* ---------- Celebración ---------- */
+.celebration {
+  position: fixed; inset: 0;
+  display: grid; place-items: center;
+  background: rgba(255, 244, 214, .55);
+  overflow: hidden;
+  z-index: 10;
+  animation: fade-in .3s;
+}
+@keyframes fade-in { from { opacity: 0; } }
+.celebration-msg {
+  display: flex; flex-direction: column; align-items: center;
+  font-size: clamp(3rem, 12vmin, 7rem);
+  font-weight: 900;
+  color: #FFE135;
+  -webkit-text-stroke: 4px var(--ink);
+  paint-order: stroke fill;
+  animation: pop-in .6s cubic-bezier(.2, .9, .3, 1.6);
+}
+.big-star { font-size: 1.8em; -webkit-text-stroke: 0; animation: spin 2s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.celebration i {
+  position: absolute; top: -30px;
+  width: 18px; height: 26px; border-radius: 5px;
+  animation-name: confetti; animation-timing-function: ease-in; animation-fill-mode: forwards;
+}
+@keyframes confetti {
+  to { transform: translate(var(--drift), 110vh) rotate(var(--rot)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
